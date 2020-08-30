@@ -1,0 +1,312 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace photo_shop_2
+{
+    public partial class Form1 : Form
+    {
+        Graphics draw;
+        Pen pen = new Pen(Color.White);
+        bool first = false;
+        Point mouse;
+        Point mouse3;
+        Bitmap b;
+        Rectangle bit;
+        bool select1 = false;
+        Colors colors = new Colors();
+        bool corshow = false;
+        bool select2 = false;
+        public Form1()
+        {
+            InitializeComponent();
+            File.Opendefault(pictureBox1);
+            draw = Graphics.FromImage(File.pic);
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            textBox2.Hide();
+            b = File.pic;
+            File.Opendefault(pictureBox1);
+            timer1.Interval = 10;
+            loadcolor();
+        }
+
+        private void loadcolor()
+        {
+            File.ramount = 0;
+            File.gamount = 0;
+            File.bamount = 0;
+            circularProgressBar1.Maximum = 255;
+            circularProgressBar1.Minimum = 0;
+            circularProgressBar1.Value = 0;
+            label1.Text = File.ramount.ToString();
+            circularProgressBar3.Maximum = 255;
+            circularProgressBar3.Minimum = 0;
+            circularProgressBar3.Value = 0;
+            label3.Text = File.gamount.ToString();
+            circularProgressBar2.Maximum = 255;
+            circularProgressBar2.Minimum = 0;
+            circularProgressBar2.Value = 0;
+            label2.Text = File.bamount.ToString();
+        }
+        private void Selectimage_Click(object sender, EventArgs e)
+        {
+            colors.ramount = 0;
+            colors.gamount = 0;
+            colors.bamount = 0;
+            File.OpenFile(pictureBox1);
+            b = File.pic;
+            circularProgressBar1.Value = File.ramount;
+            label1.Text = File.ramount.ToString();
+            circularProgressBar3.Value = File.gamount;
+            label3.Text = File.gamount.ToString();
+            circularProgressBar2.Value = File.bamount;
+            label2.Text = File.bamount.ToString();
+            Bitmap map = new Bitmap(pictureBox1.Image.Width, pictureBox1.Image.Height);
+            draw = Graphics.FromImage(map);
+        }
+
+        private void Redup_Click(object sender, EventArgs e)
+        {
+            if (File.ramount < 240)
+            {
+                File.ramount = File.ramount + 10;
+                circularProgressBar1.Value = File.ramount;
+                label1.Text = File.ramount.ToString();
+            }
+        }
+        private void RedDown_Click(object sender, EventArgs e)
+        {
+            if (File.ramount > 0)
+            {
+                File.ramount = File.ramount - 10;
+                circularProgressBar1.Value = File.ramount;
+                label1.Text = File.ramount.ToString();
+            }
+        }
+        private void greeenup_Click(object sender, EventArgs e)
+        {
+            if (File.gamount < 240)
+            {
+                File.gamount = File.gamount + 10;
+                circularProgressBar3.Value = File.gamount;
+                label3.Text = File.gamount.ToString();
+            }
+        }
+        private void greendown_Click(object sender, EventArgs e)
+        {
+            if (File.gamount > 0)
+            {
+                File.gamount = File.gamount - 10;
+                circularProgressBar3.Value = File.gamount;
+                label3.Text = File.gamount.ToString();
+            }
+        }
+        private void blueup_Click(object sender, EventArgs e)
+        {
+            if (File.bamount < 240)
+            {
+                File.bamount = File.bamount + 10;
+                circularProgressBar2.Value = File.bamount;
+                label2.Text = File.bamount.ToString();
+            }
+        }
+        private void bluedown_Click(object sender, EventArgs e)
+        {
+            if (File.bamount > 0)
+            {
+                File.bamount = File.bamount - 10;
+                circularProgressBar2.Value = File.bamount;
+                label2.Text = File.bamount.ToString();
+            }
+        }
+        private void Render_Click(object sender, EventArgs e)
+        {
+            label10.Text = "Loading...";
+            label10.Update();
+            Bitmap img = File.pic;
+            if (File.ramount != colors.ramount)
+            {
+                colors.redup(File.file, File.ramount, img, pictureBox1, select2, bit);
+            }
+            if (File.gamount != colors.gamount)
+            {
+                colors.greenup(File.file, File.gamount, img, pictureBox1, select2, bit);
+            }
+            if (File.bamount != colors.bamount)
+            {
+                colors.blueup(File.file, File.bamount, img, pictureBox1, select2, bit);
+            }
+            if (select1 == true)
+            {
+                colors.rectangle(b, bit, pictureBox1,"c");
+                select1 = false;
+            }
+            if(select2 == true)
+            {
+                reset();
+            }
+            select2 = false;
+            label10.Text = "Idle";
+        }
+        private void reset()
+        {
+            File.ramount = 0;
+            File.gamount = 0;
+            File.bamount = 0;
+            colors.ramount = 0;
+            colors.gamount = 0;
+            colors.bamount = 0;
+            circularProgressBar1.Maximum = 255;
+            circularProgressBar1.Minimum = 0;
+            circularProgressBar1.Value = 0;
+            label1.Text = File.ramount.ToString();
+            circularProgressBar3.Maximum = 255;
+            circularProgressBar3.Minimum = 0;
+            circularProgressBar3.Value = 0;
+            label3.Text = File.gamount.ToString();
+            circularProgressBar2.Maximum = 255;
+            circularProgressBar2.Minimum = 0;
+            circularProgressBar2.Value = 0;
+            label2.Text = File.bamount.ToString();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text != "")
+            {
+                pictureBox1.Image.Save($@"C:\Users\Leon\Documents\{textBox1.Text}.jpg");
+            }
+            else
+            {
+                MessageBox.Show("Add name for file");
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if(corshow == false)
+            {
+                textBox2.Show();
+                timer3.Enabled = true;
+                timer3.Interval = 100;
+                timer3.Start();
+                corshow = true;
+            }
+            else
+            {
+                timer3.Enabled = false;
+                timer3.Interval = 100;
+                timer3.Stop();
+                textBox2.Text = "";
+                textBox2.Hide();
+                corshow = false;
+            }
+        }
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+            textBox2.Text = unscaled().ToString();
+        }
+        private Point unscaled()
+        {
+            Point p1 = pictureBox1.PointToClient(Cursor.Position);
+            Point unscaled_p = new Point();
+            int w_i = pictureBox1.Image.Width;
+            int h_i = pictureBox1.Image.Height;
+            int w_c = pictureBox1.Width;
+            int h_c = pictureBox1.Height;
+            float imageRatio = w_i / (float)h_i; // image W:H ratio
+            float containerRatio = w_c / (float)h_c; // container W:H ratio
+
+            if (imageRatio >= containerRatio)
+            {
+                // horizontal image
+                float scaleFactor = w_c / (float)w_i;
+                float scaledHeight = h_i * scaleFactor;
+                // calculate gap between top of container and top of image
+                float filler = Math.Abs(h_c - scaledHeight) / 2;
+                unscaled_p.X = (int)(p1.X / scaleFactor);
+                unscaled_p.Y = (int)((p1.Y - filler) / scaleFactor);
+            }
+            else
+            {
+                // vertical image
+                float scaleFactor = h_c / (float)h_i;
+                float scaledWidth = w_i * scaleFactor;
+                float filler = Math.Abs(w_c - scaledWidth) / 2;
+                unscaled_p.X = (int)((p1.X - filler) / scaleFactor);
+                unscaled_p.Y = (int)(p1.Y / scaleFactor);
+            }
+            return unscaled_p;
+        }
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            
+            Point mouse2 = pictureBox1.PointToClient(Cursor.Position);
+            Point mouse4 = unscaled();
+            if (Control.MouseButtons == MouseButtons.Left)
+            {
+                if (first == false)
+                {
+                    b = (Bitmap)pictureBox1.Image;
+                    mouse = pictureBox1.PointToClient(Cursor.Position);
+                    mouse3 = unscaled();
+                    first = true;
+                }
+                mouse2 = pictureBox1.PointToClient(Cursor.Position);
+                mouse4 = unscaled();
+                Rectangle p = new Rectangle(Math.Min(mouse2.X, mouse.X), Math.Min(mouse2.Y, mouse.Y), Math.Abs(mouse2.X - mouse.X), Math.Abs(mouse2.Y - mouse.Y));
+                draw.DrawRectangle(pen, p);
+                pictureBox1.Image = b;
+                draw = pictureBox1.CreateGraphics();
+            }
+            else
+            {
+                if (first == true)
+                {
+                    mouse2 = pictureBox1.PointToClient(Cursor.Position);
+                    mouse4 = unscaled();
+                    Rectangle p = new Rectangle(Math.Min(mouse2.X, mouse.X), Math.Min(mouse2.Y, mouse.Y), Math.Abs(mouse2.X - mouse.X), Math.Abs(mouse2.Y - mouse.Y));
+                    bit = new Rectangle(Math.Min(mouse4.X, mouse3.X), Math.Min(mouse4.Y, mouse3.Y), Math.Abs(mouse4.X - mouse3.X), Math.Abs(mouse4.Y - mouse3.Y));;
+                    draw.DrawRectangle(pen, p);
+                    first = false;
+                    timer1.Stop();
+                }
+            }
+            
+        }
+
+
+        private void select_Click(object sender, EventArgs e)
+        {
+            select1 = true;
+            timer1.Enabled = true;
+            timer1.Start();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            select1 = false;
+            select2 = false;
+            timer1.Enabled = false;
+            pictureBox1.Image = b;
+            timer1.Stop();
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            select1 = false;
+            select2 = true;
+            timer1.Enabled = true;
+            timer1.Start();
+        }
+    }
+}

@@ -1,0 +1,244 @@
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace photo_shop_2
+{
+    class Colors
+    {
+        public int ramount;
+        public int gamount;
+        public int bamount;
+        public void redup(string file, int amount, Bitmap pic, PictureBox picbox, bool select, Rectangle size)
+        {
+            if (amount > ramount)
+            {
+                up(file, amount - ramount, pic, picbox, "r", select, size);
+            }
+            else
+            {
+                down(file, ramount - amount, pic, picbox, "r");
+            }
+            ramount = amount;
+        }
+        public void reddown(string file, int amount, Bitmap pic, PictureBox picbox)
+        {
+            down(file, amount, pic, picbox, "r");
+        }
+        public void greenup(string file, int amount, Bitmap pic, PictureBox picbox, bool select, Rectangle size)
+        {
+            if (amount > gamount)
+            {
+                up(file, amount - gamount, pic, picbox, "g", select, size);
+            }
+            else
+            {
+                down(file, gamount - amount, pic, picbox, "g");
+            }
+            gamount = amount;
+        }
+        public void greendown(string file, int amount, Bitmap pic, PictureBox picbox)
+        {
+            down(file, amount, pic, picbox, "g");
+        }
+        public void blueup(string file, int amount, Bitmap pic, PictureBox picbox, bool select, Rectangle size)
+        {
+            if (amount > bamount)
+            {
+                up(file, amount - bamount, pic, picbox, "b", select, size);
+            }
+            else
+            {
+                down(file, bamount - amount, pic, picbox, "b");
+            }
+            bamount = amount;
+        }
+        public void bluedown(string file, int amount, Bitmap pic, PictureBox picbox)
+        {
+            down(file, amount, pic, picbox, "b");
+        }
+        public void up(string file, int amount, Bitmap pic, PictureBox picbox, string col, bool select, Rectangle r)
+        {
+            for (int x = 0; x < pic.Width; x++)
+            {
+                for (int y = 0; y < pic.Height; y++)
+                {
+                    if (select == false)
+                    {
+                        if (col == "r")
+                        {
+                            Color color = pic.GetPixel(x, y);
+                            int R = color.R + amount;
+                            int G = color.G;
+                            int B = color.B;
+                            if (color.R + amount < 256)
+                            {
+                                pic.SetPixel(x, y, Color.FromArgb(R, G, B));
+                            }
+                            else
+                            {
+                                pic.SetPixel(x, y, Color.FromArgb(255, G, B));
+                            }
+                        }
+                        if (col == "g")
+                        {
+                            Color color = pic.GetPixel(x, y);
+                            int R = color.R;
+                            int G = color.G + amount;
+                            int B = color.B;
+                            if (color.G + amount < 256)
+                            {
+                                pic.SetPixel(x, y, Color.FromArgb(R, G, B));
+                            }
+                            else
+                            {
+                                pic.SetPixel(x, y, Color.FromArgb(R, 255, B));
+                            }
+                        }
+                        if (col == "b")
+                        {
+                            Color color = pic.GetPixel(x, y);
+                            int R = color.R;
+                            int G = color.G;
+                            int B = color.B + amount;
+                            if (color.B + amount < 256)
+                            {
+                                pic.SetPixel(x, y, Color.FromArgb(R, G, B));
+                            }
+                            else
+                            {
+                                pic.SetPixel(x, y, Color.FromArgb(R, G, 255));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (x >= r.X && x < r.X + r.Width && y > r.Y && y < r.Y + r.Height)
+                        {
+                            ramount = 0;
+                            gamount = 0;
+                            bamount = 0;
+                            if (col == "r")
+                            {
+                                Color color = pic.GetPixel(x, y);
+                                int R = color.R + amount;
+                                int G = color.G;
+                                int B = color.B;
+                                if (color.R + amount < 256)
+                                {
+                                    pic.SetPixel(x, y, Color.FromArgb(R, G, B));
+                                }
+                                else
+                                {
+                                    pic.SetPixel(x, y, Color.FromArgb(255, G, B));
+                                }
+                            }
+                            if (col == "g")
+                            {
+                                Color color = pic.GetPixel(x, y);
+                                int R = color.R;
+                                int G = color.G + amount;
+                                int B = color.B;
+                                if (color.G + amount < 256)
+                                {
+                                    pic.SetPixel(x, y, Color.FromArgb(R, G, B));
+                                }
+                                else
+                                {
+                                    pic.SetPixel(x, y, Color.FromArgb(R, 255, B));
+                                }
+                            }
+                            if (col == "b")
+                            {
+                                Color color = pic.GetPixel(x, y);
+                                int R = color.R;
+                                int G = color.G;
+                                int B = color.B + amount;
+                                if (color.B + amount < 256)
+                                {
+                                    pic.SetPixel(x, y, Color.FromArgb(R, G, B));
+                                }
+                                else
+                                {
+                                    pic.SetPixel(x, y, Color.FromArgb(R, G, 255));
+                                }
+                            }
+                        }
+                    }
+                }
+                if (File.cancel == true)
+                {
+                    break;
+                }
+            }
+            if (File.cancel == false)
+            {
+                picbox.Image = pic;
+                File.pic = pic;
+            }
+            else
+            {
+                File.cancel = false;
+            }
+        }
+        public void down(string file, int amount, Bitmap pic, PictureBox picbox, string col)
+        {
+            for (int x = 0; x < pic.Width; x++)
+            {
+                for (int y = 0; y < pic.Height; y++)
+                {
+                    if (col == "r")
+                    {
+                        Color color = pic.GetPixel(x, y);
+                        int R = color.R - amount;
+                        int G = color.G;
+                        int B = color.B;
+                        if (R > 0)
+                        {
+                            pic.SetPixel(x, y, Color.FromArgb(R, G, B));
+                        }
+                    }
+                    if (col == "g")
+                    {
+                        Color color = pic.GetPixel(x, y);
+                        int R = color.R;
+                        int G = color.G - amount;
+                        int B = color.B;
+                        if (G > 0)
+                        {
+                            pic.SetPixel(x, y, Color.FromArgb(R, G, B));
+                        }
+                    }
+                    if (col == "b")
+                    {
+                        Color color = pic.GetPixel(x, y);
+                        int R = color.R;
+                        int G = color.G;
+                        int B = color.B - amount;
+                        if (B > 0)
+                        {
+                            pic.SetPixel(x, y, Color.FromArgb(R, G, B));
+                        }
+                    }
+                }
+            }
+            picbox.Image = pic;
+            File.pic = pic;
+        }
+        public void rectangle(Bitmap b, Rectangle r, PictureBox p, string mode)
+        {
+            if (mode == "c")
+            {
+                System.Drawing.Imaging.PixelFormat format = b.PixelFormat;
+                Bitmap cloneBitmap = b.Clone(r, format);
+                p.Image = cloneBitmap;
+                File.pic = cloneBitmap;
+            }
+       
+        }
+    }
+}
